@@ -19,7 +19,7 @@ WiFiServer tractor_server(10010);
 WiFiClient ComputerClientConnection;
 
 //Configure the LEDS for the tractor
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(2, PIN);
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(4, PIN);
 //Configure the PWM chip for the tractor
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x52);
 
@@ -34,9 +34,13 @@ void setup()
 { 
   //Start the LEDS
   pixels.begin();
-  pixels.setPixelColor(0,pixels.Color(20,20,20));
-  pixels.setPixelColor(1,pixels.Color(20,20,20));
-  pixels.show();
+  delay(100);
+  
+  //Start with low beam for the front
+  SetLowBeam();
+  
+  //Turn on the rear lights to low R
+  SetReverseBeamRedLow();
   
   //Setup the i2c bus
   Wire.begin(pwmSDA, pwmSCL);
@@ -149,6 +153,21 @@ void SetLowBeam()
   pixels.setPixelColor(1,pixels.Color(20,20,20));
   pixels.show();
 }
+
+void SetReverseBeamRedLow()
+{
+  pixels.setPixelColor(2,pixels.Color(20,0,0));
+  pixels.setPixelColor(3,pixels.Color(20,0,0));
+  pixels.show();
+}
+
+void SetReverseBeamRedHigh()
+{
+  pixels.setPixelColor(2,pixels.Color(200,0,0));
+  pixels.setPixelColor(3,pixels.Color(200,0,0));
+  pixels.show();
+}
+
 void ProcessLightRequest(byte LightRequest)
 {
   if(LightRequest != PreviousLightRequest)
