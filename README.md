@@ -10,6 +10,13 @@ The tractor runs on an ESP-8266 microcontroller. Settings for programming are as
 
 D4 is the onboard LED
 
+# PWM Driver
+
+For testing, using the adafruit PWM driver. Download the .zip file here.
+
+https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library
+
+
 # MathWorks Support Package
 
 When you install the mathworks support package, it changes the location of the arduino. The two locations I have listed are as followed:
