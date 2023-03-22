@@ -16,6 +16,8 @@ The H-Bridge is driven off of the PWM driver chip. There is a special note that 
 
 ![ServoImages](https://user-images.githubusercontent.com/4383135/226780564-aff2c6b9-2ebc-4bbd-89e1-5e97490a3a8e.JPG)
 
+![Boardimage](https://user-images.githubusercontent.com/4383135/226780839-ab01bf45-9087-4a39-9b05-800aae6f06a6.JPG)
+
 # PWM Driver
 
 For testing, using the adafruit PWM driver. Download the .zip file here.
