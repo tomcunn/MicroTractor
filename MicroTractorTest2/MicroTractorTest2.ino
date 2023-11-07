@@ -57,15 +57,7 @@ void setup()
   pinMode(MOTOR_B_POS,  OUTPUT);
   pinMode(MOTOR_B_NEG,  OUTPUT);
   
-  digitalWrite(MOTOR_A_NEG, LOW);
-  digitalWrite(MOTOR_A_POS, HIGH);
 
-  digitalWrite(MOTOR_B_POS, LOW);
-  digitalWrite(MOTOR_B_NEG, HIGH);
-  
-  pwm.setPWM(MOTOR_A_PWM, 50, 0);
-  pwm.setPWM(MOTOR_B_PWM, 50, 0);
-  
   //Turn on external LED
   pinMode(D0, OUTPUT);
   digitalWrite(D0, HIGH);
@@ -79,23 +71,19 @@ void loop()
 {
    digitalWrite(D0, HIGH);
    digitalWrite(MOTOR_ENABLE, HIGH);
-   pulseWidth(150,SERVO_4);
-   delay(400);
-   pulseWidth(150,SERVO_3);
-   delay(400);
-   pulseWidth(150,SERVO_2);
-   delay(400);
-   pulseWidth(150,SERVO_1);
-   delay(400);
-   pulseWidth(60,SERVO_4);
-   delay(400);
-   pulseWidth(60,SERVO_3);
-   delay(400);
-   pulseWidth(60,SERVO_2);
-   delay(400);
-   pulseWidth(60,SERVO_1);
-   digitalWrite(D0, LOW);
-   delay(400);
+
+   Forward();
+   delay(100);
+   Turn();
+   delay(50);
+   Forward();
+   delay(200);
+   Turn();
+   delay(50);
+   Reverse();
+   delay(200);
+   Turn();
+   delay(50);
 }
 
 int pulseWidth(int angle, int servo_ID)
@@ -105,4 +93,41 @@ int pulseWidth(int angle, int servo_ID)
   analog_value = int(float(pulse_wide) / 1000000 * FREQUENCY * 4096);
   pwm.setPWM(servo_ID, 0, analog_value);
   return analog_value;
+}
+
+
+void Forward()
+{
+  digitalWrite(MOTOR_A_NEG, LOW);
+  digitalWrite(MOTOR_A_POS, HIGH);
+
+  digitalWrite(MOTOR_B_POS, LOW);
+  digitalWrite(MOTOR_B_NEG, HIGH);
+  
+  pwm.setPWM(MOTOR_A_PWM, 0, 2450);
+  pwm.setPWM(MOTOR_B_PWM, 0, 2450);
+}
+
+void Turn()
+{
+  digitalWrite(MOTOR_A_NEG, HIGH);
+  digitalWrite(MOTOR_A_POS, LOW);
+
+  digitalWrite(MOTOR_B_POS, LOW);
+  digitalWrite(MOTOR_B_NEG, HIGH);
+  
+  pwm.setPWM(MOTOR_A_PWM, 0, 2450);
+  pwm.setPWM(MOTOR_B_PWM, 0, 2450);
+}
+
+void Reverse()
+{  
+  digitalWrite(MOTOR_A_NEG, HIGH);
+  digitalWrite(MOTOR_A_POS, LOW);
+
+  digitalWrite(MOTOR_B_POS, HIGH);
+  digitalWrite(MOTOR_B_NEG, LOW);
+  
+  pwm.setPWM(MOTOR_A_PWM, 0, 2450);
+  pwm.setPWM(MOTOR_B_PWM, 0, 2450);
 }
