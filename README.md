@@ -1,6 +1,9 @@
 # MicroTractor
 Microtractor Project
 
+![image](https://github.com/tomcunn/MicroTractor/assets/4383135/c8d5927e-31c4-4b76-9901-1641bfc8086a)
+
+
 The tractor runs on an ESP-8266 microcontroller. Settings for programming are as followed:
 
 * NodeMCU 0.9 (ESP-12 Module)
