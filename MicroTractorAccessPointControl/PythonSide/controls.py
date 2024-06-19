@@ -8,15 +8,33 @@
 ####################################
 import pygame
 
-DEADBAND = 0.20
+DEADBAND = 0.05
+desired_position = 90
 
 def HitchControl(current_position,x_button,b_button):
-    if(x_button):
-        if(current_position < 180):
-            current_position = 180
-    elif(b_button):
-        if(current_position > 0):
-            current_position = 0
+
+    global desired_position
+    print(current_position)
+    #Define the ramp rate of the hitch here
+    ramp_rate = 7.0
+        #Use the buttons to set the desired position
+    if(b_button):
+        desired_position = 90
+    elif(x_button):
+        desired_position = 0
+    
+    #Implement a rate limiter 
+    if(current_position < (desired_position - ramp_rate)):
+        current_position = current_position + ramp_rate
+        
+    elif(current_position > (desired_position + ramp_rate)):
+        current_position = current_position - ramp_rate
+   
+    else:
+        current_position = desired_position
+   
+    print(current_position)
+    #Return the current_position
     return current_position
 
 

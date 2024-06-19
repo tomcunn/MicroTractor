@@ -81,6 +81,7 @@ while(running):
     #Process Hitch Controls
     hitch_pos = controls.HitchControl(hitch_pos,controller1.x_button,controller1.b_button)
 
+    #print(hitch_pos)
     #Process Controls
     speedleft,speedright = controls.SpeedControlJoystick( controller1.joyx ,  controller1.joyy)
 
