@@ -6,17 +6,22 @@ darkgrey = (40, 40, 40)
 lightgrey = (150, 150, 150)
 
 class ESPConnect:
-	def __init__(self):
-		print("ESP Connection Started")
-#		TCP_IP = '192.168.4.1'
-#		TCP_PORT = 10010
-#		self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#		self.client.connect((TCP_IP, TCP_PORT))
+    def __init__(self):
+        print("ESP Connection Started")
+        TCP_IP = '192.168.4.1'
+        TCP_PORT = 10010
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect((TCP_IP, TCP_PORT))
+        self.counter = 0
 
-	#The send data function is what outputs the data to the tractor
-	def SendData(self,left_side,right_side,buttons):
-#		self.client.send((bytearray([self.packetID,left_side,right_side,buttons, 0x68])))
-		print(0 ,left_side,right_side,buttons)
+    #The send data function is what outputs the data to the tractor
+    def SendData(self,left_side,right_side,buttons):
+        #Create a counter to help troubleshoot packets
+        self.counter = self.counter +1
+        if(self.counter >200):
+            self.counter = 0       
+        self.client.send((bytearray([self.counter,left_side,right_side,buttons, 0x68])))
+        print(self.counter ,left_side,right_side,buttons)
 
 
 class TextPrint:
@@ -61,7 +66,7 @@ pygame.joystick.init()
 textPrint = TextPrint()
 
 #Create a connection to the ESP 
-connection = ESPConnect()
+#connection = ESPConnect()
  
 # -------- Main Program Loop -----------
 while done==False:
@@ -144,14 +149,34 @@ while done==False:
     right = 125
 
     #Execute the drive strategy
-    if(yval < 0.05 and yval > -0.05): 
+    if(yval < 0.01 and yval > -0.01): 
         left = 125
         right = 125
     else:
         left = yval*125+125
         right = yval*125+125
-        
-    connection.SendData(int(left),int(right),0x00)
+
+    if (xval > 0.01):
+        right = right + xval*200 
+        left = left - xval*200
+
+    elif (xval < -0.01):
+        left  = left  - xval*200
+        right = right + xval*200
+    
+    #Saturation
+    if(left > 250):
+        left = 250
+    elif(left< 0):
+        left = 0
+
+    if(right > 250):
+        right = 250
+    elif(right <0):
+        right = 0
+
+   # connection.SendData(int(left),int(right),0x00)
+
     # Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
  
