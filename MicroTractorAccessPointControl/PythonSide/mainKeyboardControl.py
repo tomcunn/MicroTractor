@@ -40,27 +40,14 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((500, 500))
 pygame.display.update()
 
-# Create an instance of NintendoJoystickManager and run the main loop
-joystick_manager = joy.JoystickManager()
-
-number_of_controllers = len(joystick_manager.nintendo_joysticks)
-
-print("This many controllers were found:" + str(number_of_controllers))
-
-#This just shortens the name of the controller to make it easier to keep track of
-if(number_of_controllers == 1):
-    controller1 = joystick_manager.nintendo_joysticks[0]
-elif(number_of_controllers == 2):
-    controller1 = joystick_manager.nintendo_joysticks[0]
-    controller2 = joystick_manager.nintendo_joysticks[1]
-
 # Set up the font
 font = pygame.font.Font(None, 20)
-
 
 hitch_pos = 90
 running = True
 
+speedleft = 125
+speedright = 125
 
 ################ MAIN LOOP ########################################
 while(running):
@@ -71,23 +58,21 @@ while(running):
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:  # Check if the 'q' key is pressed
                 running = False
+            elif event.key == pygame.K_w:  # Check if the 'w' key is pressed
+                speedleft = speedleft + 5
+            elif event.key == pygame.K_s:  # Check if the 's' key is pressed
+                speedleft =speedleft - 5
+            elif event.key == pygame.K_e:  # Check if the 'e' key is pressed
+                speedright = speedright + 5
+            elif event.key == pygame.K_d:  # Check if the 'd' key is pressed
+                speedright =speedright -5
     
     # Fill the screen with white
     screen.fill(WHITE)
-   
-    #Process Operator Inputs
-    joystick_manager.run()
-
-    #Process Hitch Controls
-    hitch_pos = controls.HitchControl(hitch_pos,controller1.x_button,controller1.b_button)
-
-    #print(hitch_pos)
-    #Process Controls
-    speedleft,speedright = controls.SpeedControlJoystick( controller1.joyx ,  controller1.joyy)
-
-    #Send outputs
-    datatoSend = bytes([0x4D,int(speedleft),int(speedright),int(hitch_pos),int(controller1.a_button),int(controller1.y_button)])
-    udp_socket.sendto(datatoSend, ('192.168.4.1' , 5000))
+ 
+    # Send outputs
+    datatoSend = bytes([0x4D, int(speedleft), int(speedright), int(hitch_pos), 0x01, 0x00])
+    udp_socket.sendto(datatoSend, ('192.168.4.1', 5000))
     
     # Get the current FPS
     fps = int(clock.get_fps())
@@ -97,17 +82,14 @@ while(running):
     fps_text = font.render(f"FPS: {counter}", True, BLACK)
     screen.blit(fps_text, (10, 10))
     
-    fps_text = font.render(f"X-Axis: {round(controller1.joyx,2)}", True, BLACK)
-    screen.blit(fps_text, (10, 30))
-    
-    fps_text = font.render(f"Y_Axis: {round(controller1.joyy,2)}", True, BLACK)
-    screen.blit(fps_text, (10, 50))
-    
-    fps_text = font.render(f"Speed Left: {round(speedleft,1)}", True, BLACK)
+    fps_text = font.render(f"Speed Left: {round(speedleft, 1)}", True, BLACK)
     screen.blit(fps_text, (10, 70))
     
-    fps_text = font.render(f"Speed Right: {round(speedright,1)}", True, BLACK)
+    fps_text = font.render(f"Speed Right: {round(speedright, 1)}", True, BLACK)
     screen.blit(fps_text, (10, 90))
+    
+    fps_text = font.render(f"Hitch Position: {hitch_pos}", True, BLACK)
+    screen.blit(fps_text, (10, 110))
     
     # Frame rate control
     clock.tick(20)
@@ -119,4 +101,3 @@ while(running):
 pygame.quit()
 udp_socket.close()
 sys.exit()
-    
