@@ -2,8 +2,6 @@ import pygame
 import socket
 import time
 import select
-import JoystickControl2 as joy
-import controls
 import math
 
 # Initialize pygame
@@ -92,8 +90,23 @@ while(True):
  
     #Process some drive strategy
     # 250 is full speed forward, 0 is full speed reverse
-    speedleft = 125+ 125*left_pedal
-    speedright = 125 + 125*left_pedal
+    speedleft = 62.5*left_pedal + 187.5
+    speedright = 62.5*left_pedal + 187.5
+
+    #Add in some steering
+    speedleft += steering_angle * 125
+    speedright -= steering_angle *125
+
+    #Add saturation blocks
+    if(speedleft > 250):
+        speedleft = 250
+    if(speedleft < 0):
+        speedleft = 0
+        
+    if(speedright > 250):
+        speedright = 250
+    if(speedright < 0):
+        speedright = 0
 
     # Send outputs
     datatoSend = bytes([0x4D, int(speedleft), int(speedright), int(hitch_pos), 0x01, 0x00])
