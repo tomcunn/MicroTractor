@@ -1,5 +1,6 @@
 # MicroTractor
 Microtractor Project
+![image](https://github.com/user-attachments/assets/6e703ab6-1dd0-42e9-a74c-0489b52b0ed1)
 
 ![image](https://github.com/tomcunn/MicroTractor/assets/4383135/c8d5927e-31c4-4b76-9901-1641bfc8086a)
 
